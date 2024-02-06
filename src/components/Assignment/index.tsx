@@ -3,7 +3,7 @@ import { TbTrash } from 'react-icons/tb';
 import {} from 'react-icons';
 import { useState } from 'react';
 
-export function Assignment({ details, onStatusChange }) {
+export function Assignment({ details, onStatusChange, onDelete }) {
   const [completed, setCompleted] = useState(details.completed);
 
   const updateAssignmentStatus = () => {
@@ -36,7 +36,10 @@ export function Assignment({ details, onStatusChange }) {
 
       <p className={completed ? styles.textCompleted : ''}>{details.title}</p>
 
-      <button className={styles.deleteButton}>
+      <button
+        className={styles.deleteButton}
+        onClick={() => onDelete(details.id)}
+      >
         <TbTrash size={20} />
       </button>
     </div>

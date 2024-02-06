@@ -1,16 +1,16 @@
 import styles from './header.module.css';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { uppercase } from '../../helpers/stringHelpers';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
-export function Header({ newAssignmentHandler }) {
+export function Header({ onAssignmentCreate }) {
+  const assignmentInput = useRef('');
+
   const [createButtonDisabled, setCreateButtonDisabled] = useState(true);
-  const [newAssignmentInput, setNewAssignmentInput] = useState('');
 
   const onNewAssignmentInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length > 2) {
       setCreateButtonDisabled(false);
-      setNewAssignmentInput(e.target.value);
     } else {
       setCreateButtonDisabled(true);
     }
@@ -21,11 +21,15 @@ export function Header({ newAssignmentHandler }) {
 
     const newAssignment = {
       id: Date.now(),
-      title: newAssignmentInput,
+      title: assignmentInput.current.value,
       completed: false,
     };
 
-    newAssignmentHandler(newAssignment);
+    onAssignmentCreate(newAssignment);
+
+    // Reset input & create button state
+    assignmentInput.current.value = '';
+    setCreateButtonDisabled(true);
   };
 
   return (
@@ -34,6 +38,7 @@ export function Header({ newAssignmentHandler }) {
       <h1>{uppercase('bcit')} Assignment Tracker</h1>
       <form className={styles.newAssignmentForm} onSubmit={formSubmitHandler}>
         <input
+          ref={assignmentInput}
           name="assignment-title"
           placeholder="Add an assignment, at least 3 characters length"
           type="text"

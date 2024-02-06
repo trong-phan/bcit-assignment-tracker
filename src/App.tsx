@@ -3,24 +3,19 @@ import { Assignments } from './components/Assignments';
 import { useState } from 'react';
 
 function App() {
-  const defaultAssignment = [
-    {
-      id: Date.now(),
-      title: '111',
-      completed: false,
-    },
-    {
-      id: Date.now() + 1,
-      title: '222',
-      completed: true,
-    },
-  ];
-  const [assignments, updateAssignments] = useState(defaultAssignment);
+  const [assignmentList, updateAssignmentsList] = useState([]);
+
+  const onAssignmentCreateHandler = (newAssignment) => {
+    updateAssignmentsList([newAssignment, ...assignmentList]);
+  };
 
   return (
     <>
-      <Header newAssignmentHandler={updateAssignments} />
-      <Assignments assignments={assignments} />
+      <Header onAssignmentCreate={onAssignmentCreateHandler} />
+      <Assignments
+        assignments={assignmentList}
+        onUpdateAssignmentsList={updateAssignmentsList}
+      />
     </>
   );
 }
