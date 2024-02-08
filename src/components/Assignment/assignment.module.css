@@ -10,6 +10,10 @@
   gap: 12px;
 }
 
+.assignment:hover {
+  background: #3b3b3b;
+}
+
 .assignment p {
   font-size: 14px;
   line-height: 19px;

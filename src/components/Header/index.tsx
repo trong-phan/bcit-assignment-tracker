@@ -2,9 +2,14 @@ import styles from './header.module.css';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { uppercase } from '../../helpers/stringHelpers';
 import { useRef, useState } from 'react';
+import { AssignmentInfo } from '../../types';
 
-export function Header({ onAssignmentCreate }) {
-  const assignmentInput = useRef('');
+type HeaderProps = {
+  onAssignmentCreate: (a: AssignmentInfo) => void;
+};
+
+export function Header({ onAssignmentCreate }: HeaderProps) {
+  const assignmentInput = useRef<HTMLInputElement>(null);
 
   const [createButtonDisabled, setCreateButtonDisabled] = useState(true);
 
@@ -19,16 +24,18 @@ export function Header({ onAssignmentCreate }) {
   const formSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newAssignment = {
+    const newAssignment: AssignmentInfo = {
       id: Date.now(),
-      title: assignmentInput.current.value,
+      title: assignmentInput.current?.value || '',
       completed: false,
     };
 
     onAssignmentCreate(newAssignment);
 
     // Reset input & create button state
-    assignmentInput.current.value = '';
+    if (assignmentInput.current) {
+      assignmentInput.current.value = '';
+    }
     setCreateButtonDisabled(true);
   };
 

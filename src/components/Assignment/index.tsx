@@ -2,14 +2,25 @@ import styles from './assignment.module.css';
 import { TbTrash } from 'react-icons/tb';
 import {} from 'react-icons';
 import { useState } from 'react';
+import { AssignmentInfo } from '../../types';
 
-export function Assignment({ details, onStatusChange, onDelete }) {
-  const [completed, setCompleted] = useState(details.completed);
+type AssignmentProps = {
+  assignment: AssignmentInfo;
+  onStatusChange: (e: { id: number; completed: boolean }) => void;
+  onDelete: (id: number) => void;
+};
+
+export function Assignment({
+  assignment,
+  onStatusChange,
+  onDelete,
+}: AssignmentProps) {
+  const [completed, setCompleted] = useState(assignment.completed);
 
   const updateAssignmentStatus = () => {
     const newStatus = !completed;
     setCompleted(newStatus);
-    onStatusChange({ id: details.id, completed: newStatus });
+    onStatusChange({ id: assignment.id, completed: newStatus });
   };
 
   return (
@@ -34,11 +45,13 @@ export function Assignment({ details, onStatusChange, onDelete }) {
         )}
       </button>
 
-      <p className={completed ? styles.textCompleted : ''}>{details.title}</p>
+      <p className={completed ? styles.textCompleted : ''}>
+        {assignment.title}
+      </p>
 
       <button
         className={styles.deleteButton}
-        onClick={() => onDelete(details.id)}
+        onClick={() => onDelete(assignment.id)}
       >
         <TbTrash size={20} />
       </button>

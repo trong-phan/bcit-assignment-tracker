@@ -1,11 +1,14 @@
 import { Header } from './components/Header';
 import { Assignments } from './components/Assignments';
 import { useState } from 'react';
+import { AssignmentInfo } from './types';
 
 function App() {
-  const [assignmentList, updateAssignmentsList] = useState([]);
+  const [assignmentList, updateAssignmentsList] = useState<AssignmentInfo[]>(
+    []
+  );
 
-  const onAssignmentCreateHandler = (newAssignment) => {
+  const onAssignmentCreateHandler = (newAssignment: AssignmentInfo) => {
     updateAssignmentsList([newAssignment, ...assignmentList]);
   };
 

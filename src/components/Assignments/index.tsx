@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import { Assignment } from '../Assignment';
 import styles from './assignments.module.css';
+import { AssignmentInfo } from '../../types';
 
-function countCompletedAssignments(assignments) {
+type AssignmentListProps = {
+  assignments: AssignmentInfo[];
+  onUpdateAssignmentsList: (a: AssignmentInfo[]) => void;
+};
+
+function countCompletedAssignments(assignments: AssignmentInfo[]) {
   if (assignments.length === 0) {
     return 0;
   }
@@ -13,18 +19,27 @@ function countCompletedAssignments(assignments) {
   );
 }
 
-export function Assignments({ assignments, onUpdateAssignmentsList }) {
+export function Assignments({
+  assignments,
+  onUpdateAssignmentsList,
+}: AssignmentListProps) {
   const [completedAssignments, setCompletedAssignments] = useState(
     countCompletedAssignments(assignments)
   );
 
-  const assignmentDeleteHandler = (id) => {
+  const assignmentDeleteHandler = (id: number) => {
     const newAssignmentsList = assignments.filter((a) => a.id !== id);
     onUpdateAssignmentsList(newAssignmentsList);
     setCompletedAssignments(countCompletedAssignments(newAssignmentsList));
   };
 
-  const assignmentStatusChangeHandler = ({ id, completed }) => {
+  const assignmentStatusChangeHandler = ({
+    id,
+    completed,
+  }: {
+    id: number;
+    completed: boolean;
+  }) => {
     const clonedAssignment = [...assignments];
     const updatingAssignmentIndex = clonedAssignment.findIndex(
       (a) => a.id === id
@@ -55,7 +70,7 @@ export function Assignments({ assignments, onUpdateAssignmentsList }) {
           assignments.map((a) => (
             <li key={a.id}>
               <Assignment
-                details={a}
+                assignment={a}
                 onStatusChange={assignmentStatusChangeHandler}
                 onDelete={assignmentDeleteHandler}
               />
